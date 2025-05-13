@@ -73,7 +73,10 @@ class _MyDrawerState extends State<MyDrawer> {
           icon: Icons.add,
           title: "Add New Task",
           isDark: widget.isDark,
-          onTap: widget.popUp,
+          onTap: () {
+            Navigator.pop(context);
+            widget.popUp();
+          },
         ),
         DrawerTile(
           icon: Icons.settings,
