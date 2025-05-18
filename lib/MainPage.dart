@@ -5,8 +5,14 @@ import 'package:flutter_application_6/ToDoTile.dart';
 
 class MainPage extends StatefulWidget {
   bool isDark;
+  final Function(int) delTaskPopUp;
   List notes;
-  MainPage({super.key, required this.isDark, required this.notes});
+  MainPage({
+    super.key,
+    required this.isDark,
+    required this.notes,
+    required this.delTaskPopUp,
+  });
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -41,6 +47,10 @@ class _MainPageState extends State<MainPage> {
             itemCount: notes.length,
             itemBuilder: (context, index) {
               return ToDoTile(
+                key: ValueKey(notes[index][0]),
+                delTask: () {
+                  widget.delTaskPopUp(index);
+                },
                 task: notes[index][0],
                 tileColor:
                     index % 2 == 0

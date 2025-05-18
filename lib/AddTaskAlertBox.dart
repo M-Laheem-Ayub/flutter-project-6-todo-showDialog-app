@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-class MyAlertBox extends StatelessWidget {
-  MyAlertBox({super.key, required this.addNewTask});
+class AddTaskAlertBox extends StatelessWidget {
+  AddTaskAlertBox({super.key, required this.addNewTask});
 
   Function addNewTask;
 

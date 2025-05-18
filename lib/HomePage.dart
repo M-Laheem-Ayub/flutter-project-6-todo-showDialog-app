@@ -1,8 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_6/MyAlertBox.dart';
+import 'package:flutter_application_6/AddTaskAlertBox.dart';
+import 'package:flutter_application_6/DelTaskAlertBox.dart';
 import 'package:flutter_application_6/MainPage.dart';
+import 'package:flutter_application_6/MyAppBar.dart';
 import 'package:flutter_application_6/MyDrawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isDark = false;
-  bool isPopUp = false;
+  bool isaddTaskPopUp = false;
   List notes = [
     ["Submit Flutter development assignment", false],
     ["Read 10 pages of assigned reading material", false],
@@ -27,17 +29,32 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void delTask(int index) {
+    setState(() {
+      notes.removeAt(index);
+    });
+  }
+
   void darkMode() {
     setState(() {
       isDark = !isDark;
     });
   }
 
-  void popUp() {
+  void addTaskPopUp() {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(content: MyAlertBox(addNewTask: addNewTask));
+        return AlertDialog(content: AddTaskAlertBox(addNewTask: addNewTask));
+      },
+    );
+  }
+
+  void delTaskPopUp(Function() delTaskCallback) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(content: DelTaskAlertBox(delTask: delTaskCallback));
       },
     );
   }
@@ -47,51 +64,29 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: isDark ? Color(0xff101218) : Colors.white,
-        appBar: AppBar(
-          shadowColor: isDark ? Colors.white : Colors.black,
-          backgroundColor: isDark ? Color(0xff101218) : Colors.white,
-          leading: Builder(
-            builder:
-                (context) => IconButton(
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                  icon: Icon(
-                    Icons.menu,
-                    color: isDark ? Colors.white : Color(0xff363e45),
-                  ),
-                ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                popUp();
-              },
-              icon: Icon(
-                Icons.add,
-                size: 30,
-                color: isDark ? Colors.white : Color(0xff363e45),
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                darkMode();
-              },
-              icon: Icon(
-                isDark ? Icons.light_mode : Icons.dark_mode,
-                size: 30,
-                color: isDark ? Colors.white : Color(0xff363e45),
-              ),
-            ),
-          ],
+        appBar: MyAppBar(
+          isDark: isDark,
+          addTaskPopUp: addTaskPopUp,
+          darkMode: darkMode,
         ),
-
         drawer: Drawer(
           width: 280,
           backgroundColor: isDark ? Color(0xff101218) : Colors.white,
-          child: MyDrawer(isDark: isDark, darkMode: darkMode, popUp: popUp),
+          child: MyDrawer(
+            isDark: isDark,
+            darkMode: darkMode,
+            addTaskPopUp: addTaskPopUp,
+          ),
         ),
-        body: MainPage(isDark: isDark, notes: notes),
+        body: MainPage(
+          isDark: isDark,
+          notes: notes,
+          delTaskPopUp: (int index) {
+            delTaskPopUp(() {
+              delTask(index); // ✅ Actual delete
+            });
+          },
+        ),
       ),
     );
   }

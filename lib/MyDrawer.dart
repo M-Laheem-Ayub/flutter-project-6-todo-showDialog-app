@@ -7,10 +7,10 @@ class MyDrawer extends StatefulWidget {
     super.key,
     required this.isDark,
     required this.darkMode,
-    required this.popUp,
+    required this.addTaskPopUp,
   });
   bool isDark;
-  Function darkMode, popUp;
+  Function darkMode, addTaskPopUp;
   @override
   State<MyDrawer> createState() => _MyDrawerState();
 }
@@ -75,7 +75,7 @@ class _MyDrawerState extends State<MyDrawer> {
           isDark: widget.isDark,
           onTap: () {
             Navigator.pop(context);
-            widget.popUp();
+            widget.addTaskPopUp();
           },
         ),
         DrawerTile(
